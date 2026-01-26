@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EC Healthcare</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="admin-dashboard-styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-container">
+            <!-- EC Healthcare Logo -->
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span class="logo-text">EC Healthcare</span>
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">Dashboard</a></li>
+                    <li><a href="#feedbacks" class="nav-link" onclick="showSection('feedbacks')">User Feedbacks</a></li>
+                    <li><a href="#reports" class="nav-link" onclick="showSection('reports')">Doctor Reports</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="globalSearch" class="search-input" placeholder="Search across all data...">
+            </div>
+            
+            <!-- User Profile -->
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="sidebar-list">
+                    <li>
+                        <a href="#dashboard" class="sidebar-link active" onclick="showSection('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#feedbacks" class="sidebar-link" onclick="showSection('feedbacks')">
+                            <i class="fas fa-comments"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#reports" class="sidebar-link" onclick="showSection('reports')">
+                            <i class="fas fa-file-medical"></i>
+                            <span>Doctor Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome to EC Healthcare Admin Panel</p>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Users</h3>
+                            <span class="card-number" id="totalUsers">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Doctors</h3>
+                            <span class="card-number" id="totalDoctors">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Feedbacks</h3>
+                            <span class="card-number" id="totalFeedbacks">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Reports</h3>
+                            <span class="card-number" id="totalReports">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Feedbacks Section -->
+            <section id="feedbacks-section" class="content-section">
+                <div class="section-header">
+                    <h1>User Feedbacks Management</h1>
+                    <button class="btn btn-primary" onclick="openFeedbackModal()">
+                        <i class="fas fa-plus"></i>
+                        Add Feedback
+                    </button>
+                </div>
+                
+                <!-- Filters and Search -->
+                <div class="table-controls">
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="feedbackSearch" placeholder="Search feedbacks..." onkeyup="filterFeedbacks()">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <select id="doctorFilter" onchange="filterFeedbacks()">
+                                <option value="">All Doctors</option>
+                            </select>
+                            
+                            <select id="ratingFilter" onchange="filterFeedbacks()">
+                                <option value="">All Ratings</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                            
+                            <input type="date" id="dateFilter" onchange="filterFeedbacks()">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feedbacks Table -->
+                <div class="table-container">
+                    <table class="data-table" id="feedbacksTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('feedbacks', 'id')">ID <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('feedbacks', 'userName')">User Name <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('feedbacks', 'doctorName')">Doctor Name <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('feedbacks', 'rating')">Rating <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('feedbacks', 'date')">Feedback Date <i class="fas fa-sort"></i></th>
+                                <th>Comments</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feedbacksTableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <span id="feedbackPaginationInfo">Showing 0 of 0 entries</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn btn-secondary" onclick="previousPage('feedbacks')" id="feedbackPrevBtn">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <div class="page-numbers" id="feedbackPageNumbers"></div>
+                        <button class="btn btn-secondary" onclick="nextPage('feedbacks')" id="feedbackNextBtn">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Doctor Reports Section -->
+            <section id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h1>Doctor Reports Management</h1>
+                    <button class="btn btn-primary" onclick="openReportModal()">
+                        <i class="fas fa-plus"></i>
+                        Add Report
+                    </button>
+                </div>
+                
+                <!-- Filters and Search -->
+                <div class="table-controls">
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="reportSearch" placeholder="Search reports..." onkeyup="filterReports()">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <select id="specializationFilter" onchange="filterReports()">
+                                <option value="">All Specializations</option>
+                            </select>
+                            
+                            <input type="date" id="reportDateFilter" onchange="filterReports()">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reports Table -->
+                <div class="table-container">
+                    <table class="data-table" id="reportsTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('reports', 'id')">ID <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('reports', 'doctorName')">Doctor Name <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('reports', 'specialization')">Specialization <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('reports', 'date')">Report Date <i class="fas fa-sort"></i></th>
+                                <th>Report Summary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <span id="reportPaginationInfo">Showing 0 of 0 entries</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn btn-secondary" onclick="previousPage('reports')" id="reportPrevBtn">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <div class="page-numbers" id="reportPageNumbers"></div>
+                        <button class="btn btn-secondary" onclick="nextPage('reports')" id="reportNextBtn">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="feedbackModalTitle">Add New Feedback</h2>
+                <button class="modal-close" onclick="closeFeedbackModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="feedbackForm" onsubmit="saveFeedback(event)">
+                <div class="form-group">
+                    <label for="feedbackUserName">User Name *</label>
+                    <input type="text" id="feedbackUserName" name="userName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackDoctorName">Doctor Name *</label>
+                    <select id="feedbackDoctorName" name="doctorName" required>
+                        <option value="">Select Doctor</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackRating">Rating *</label>
+                    <div class="rating-input">
+                        <input type="radio" id="rating5" name="rating" value="5" required>
+                        <label for="rating5">5 Stars</label>
+                        <input type="radio" id="rating4" name="rating" value="4">
+                        <label for="rating4">4 Stars</label>
+                        <input type="radio" id="rating3" name="rating" value="3">
+                        <label for="rating3">3 Stars</label>
+                        <input type="radio" id="rating2" name="rating" value="2">
+                        <label for="rating2">2 Stars</label>
+                        <input type="radio" id="rating1" name="rating" value="1">
+                        <label for="rating1">1 Star</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackDate">Feedback Date *</label>
+                    <input type="date" id="feedbackDate" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackComments">Comments *</label>
+                    <textarea id="feedbackComments" name="comments" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="reportModalTitle">Add New Doctor Report</h2>
+                <button class="modal-close" onclick="closeReportModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="reportForm" onsubmit="saveReport(event)">
+                <div class="form-group">
+                    <label for="reportDoctorName">Doctor Name *</label>
+                    <input type="text" id="reportDoctorName" name="doctorName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reportSpecialization">Specialization *</label>
+                    <select id="reportSpecialization" name="specialization" required>
+                        <option value="">Select Specialization</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Psychiatry">Psychiatry</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Emergency Medicine">Emergency Medicine</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reportDate">Report Date *</label>
+                    <input type="date" id="reportDate" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reportSummary">Report Summary *</label>
+                    <textarea id="reportSummary" name="summary" rows="6" required placeholder="Enter professional experience, qualifications, achievements, etc."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeReportModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <p id="deleteMessage">Are you sure you want to delete this record?</p>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="public/js/api-client.js"></script>
+    <script src="admin-dashboard-script.js"></script>
+</body>
+</html>

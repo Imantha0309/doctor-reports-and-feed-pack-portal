@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors - EC Healthcare</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="doctors-styles.css">
+</head>
+<body>
+    <!-- Sticky Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h1 class="brand-name">EC Healthcare</h1>
+                </div>
+                
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                        <li><a href="feedback.html" class="nav-link">User feedbacks</a></li>
+                        <li><a href="doctors.html" class="nav-link active">Doctor reports</a></li>
+                    </ul>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2 class="page-title">Our Doctors</h2>
+                <p class="page-subtitle">Meet our experienced healthcare professionals</p>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-field">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search doctors..." />
+                </div>
+                
+                <div class="filter-field">
+                    <i class="fas fa-filter"></i>
+                    <select id="filterSelect">
+                        <option value="">Filter by specialty</option>
+                        <option value="cardiology">Cardiology</option>
+                        <option value="neurology">Neurology</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="orthopedics">Orthopedics</option>
+                        <option value="dermatology">Dermatology</option>
+                        <option value="psychiatry">Psychiatry</option>
+                    </select>
+                </div>
+                
+                <div class="sort-field">
+                    <i class="fas fa-bars"></i>
+                    <select id="sortSelect">
+                        <option value="name">Sort by name</option>
+                        <option value="rating">Sort by rating</option>
+                        <option value="experience">Sort by experience</option>
+                        <option value="patients">Sort by patients</option>
+                    </select>
+                </div>
+                
+                <button class="add-btn" onclick="openDoctorModal()">
+                    <i class="fas fa-plus"></i>
+                    Add Doctor
+                </button>
+            </div>
+
+            <!-- Doctors Grid -->
+            <div class="doctors-grid" id="doctorsGrid">
+                <!-- Doctors will be loaded dynamically from database -->
+            </div>
+
+            <!-- Pagination Container -->
+            <div id="paginationContainer" class="pagination-container">
+                <!-- Pagination will be rendered here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Doctor Modal -->
+    <div class="modal" id="doctorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="doctorModalTitle">Add New Doctor</h3>
+                <button class="close-btn" onclick="closeDoctorModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="doctorForm" class="modal-body">
+                <div class="form-group">
+                    <label for="doctorName">Doctor Name</label>
+                    <input type="text" id="doctorName" name="name" required placeholder="Dr. John Smith">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorAge">Age</label>
+                    <input type="number" id="doctorAge" name="age" required min="25" max="80" placeholder="35">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorEmail">Email</label>
+                    <input type="email" id="doctorEmail" name="email" required placeholder="doctor@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorSpecialization">Specialization</label>
+                    <select id="doctorSpecialization" name="specialization" required>
+                        <option value="">Select Specialization</option>
+                        <option value="cardiology">Cardiology</option>
+                        <option value="neurology">Neurology</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="orthopedics">Orthopedics</option>
+                        <option value="dermatology">Dermatology</option>
+                        <option value="psychiatry">Psychiatry</option>
+                        <option value="internal-medicine">Internal Medicine</option>
+                        <option value="surgery">Surgery</option>
+                        <option value="radiology">Radiology</option>
+                        <option value="anesthesiology">Anesthesiology</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorSummary">Professional Summary</label>
+                    <textarea id="doctorSummary" name="summary" rows="4" required placeholder="Brief professional summary..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorLicenses">Licenses & Registrations</label>
+                    <textarea id="doctorLicenses" name="licenses" rows="3" required placeholder="Medical licenses and certifications..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorClinicalFocus">Clinical Focus</label>
+                    <textarea id="doctorClinicalFocus" name="clinicalFocus" rows="3" required placeholder="Areas of clinical focus..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorAffiliations">Hospital Affiliations</label>
+                    <textarea id="doctorAffiliations" name="affiliations" rows="2" required placeholder="Hospital and clinic affiliations..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorLanguages">Languages</label>
+                    <input type="text" id="doctorLanguages" name="languages" required placeholder="English, Spanish, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorContact">Contact & Availability</label>
+                    <textarea id="doctorContact" name="contact" rows="2" required placeholder="Office hours and contact information..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDoctorModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="public/js/api-client.js"></script>
+    <script src="doctors-script.js"></script>
+</body>
+</html>

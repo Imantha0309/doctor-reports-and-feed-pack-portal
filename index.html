@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC Healthcare - Exceptional Healthcare Services</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sticky Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h1 class="brand-name">EC Healthcare</h1>
+                </div>
+                
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                        <li><a href="feedback.html" class="nav-link">User feedbacks</a></li>
+                        <li><a href="doctors.html" class="nav-link">Doctor reports</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">Welcome to EC Healthcare</h2>
+                    <p class="hero-subtitle">Providing exceptional healthcare services with patient-centered care</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3 class="feature-title">Expert Medical Care</h3>
+                        <p class="feature-description">Our team of experienced doctors and healthcare professionals provide comprehensive medical care.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="feature-title">Patient-Centered Approach</h3>
+                        <p class="feature-description">We prioritize patient comfort, safety, and satisfaction in all our healthcare services.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="feature-title">24/7 Emergency Care</h3>
+                        <p class="feature-description">Round-the-clock emergency services to ensure immediate medical attention when needed.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Feedbacks Section -->
+        <section class="recent-feedbacks">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Patient Feedbacks</h2>
+                    <p class="section-subtitle">What our patients are saying about their experience</p>
+                    <a href="feedback.html" class="view-all-btn">View All Feedbacks</a>
+                </div>
+                
+                <div class="feedbacks-grid" id="recentFeedbacks">
+                    <!-- Feedbacks will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="container">
+                <div class="testimonials-content">
+                    <h2 class="testimonials-title">Trusted by Innovators Worldwide</h2>
+                    <p class="testimonials-subtitle">Join thousands of satisfied customers who have transformed their business with our innovative solutions</p>
+                    
+                    <div class="testimonials-grid">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Steve Smith" class="avatar-img">
+                            </div>
+                            <h4 class="testimonial-name">Steve Smith</h4>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-quote">"The UI is so clean and intuitive. It feels like it was designed with the user's peace of mind at the forefront. Truly a soft and delightful experience."</p>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Sarah Johnson" class="avatar-img">
+                            </div>
+                            <h4 class="testimonial-name">Sarah Johnson</h4>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-quote">"A masterclass in minimalist design, it doesn't scream for attention, but it's impossible to ignore. The subtle shadows and highlights are beautiful."</p>
+                        </div>
+                        
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Jane Miller" class="avatar-img">
+                            </div>
+                            <h4 class="testimonial-name">Jane Miller</h4>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-quote">"The interface is so friendly and soft. It makes complex tasks feel simple and approachable. A really delightful user experience from top to bottom."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 EC Healthcare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

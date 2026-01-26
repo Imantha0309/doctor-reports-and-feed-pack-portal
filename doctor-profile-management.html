@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile Management - EC Healthcare</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="doctor-profile-styles.css">
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h1 class="brand-name">EC Healthcare</h1>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="search-field">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search" />
+                    </div>
+                    
+                    <div class="filter-field">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter by</span>
+                    </div>
+                    
+                    <div class="sort-field">
+                        <i class="fas fa-bars"></i>
+                        <span>Sort of</span>
+                    </div>
+                </div>
+                
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                        <li><a href="feedback.html" class="nav-link">User feedbacks</a></li>
+                        <li><a href="doctors.html" class="nav-link active">Doctor reports</a></li>
+                    </ul>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Left Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <button class="sidebar-btn" onclick="navigateToSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </button>
+                
+                <button class="sidebar-btn" onclick="navigateToSection('feedback')">
+                    <i class="fas fa-comments"></i>
+                    <span>Feedback</span>
+                </button>
+                
+                <button class="sidebar-btn active" onclick="navigateToSection('doctors')">
+                    <i class="fas fa-user-md"></i>
+                    <span>Doctor Reports</span>
+                </button>
+            </div>
+            
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="profile-header">
+                    <h2 class="profile-title">Add Doctor Profile</h2>
+                    <div class="profile-actions">
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Doctors
+                        </button>
+                        <button class="btn btn-primary" onclick="saveDoctorProfile()">
+                            <i class="fas fa-save"></i>
+                            Save Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <!-- Doctor Profile Form -->
+                    <div class="profile-form-section">
+                        <form class="doctor-profile-form" id="doctorProfileForm">
+                            <!-- Basic Information -->
+                            <div class="form-section">
+                                <h3 class="section-title">Basic Information</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="doctorName">Doctor Name *</label>
+                                        <input type="text" id="doctorName" name="doctorName" placeholder="Enter Doctor Name" required>
+                                        <div class="error-message" id="doctorNameError"></div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="age">Age *</label>
+                                        <input type="number" id="age" name="age" placeholder="Enter Doctor's Age" min="25" max="80" required>
+                                        <div class="error-message" id="ageError"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">Email *</label>
+                                        <input type="email" id="email" name="email" placeholder="Enter Doctor's Email" required>
+                                        <div class="error-message" id="emailError"></div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="specialization">Specialization *</label>
+                                        <select id="specialization" name="specialization" required>
+                                            <option value="">Select Specialization</option>
+                                            <option value="cardiology">Cardiology</option>
+                                            <option value="neurology">Neurology</option>
+                                            <option value="pediatrics">Pediatrics</option>
+                                            <option value="orthopedics">Orthopedics</option>
+                                            <option value="dermatology">Dermatology</option>
+                                            <option value="psychiatry">Psychiatry</option>
+                                            <option value="internal-medicine">Internal Medicine</option>
+                                            <option value="surgery">Surgery</option>
+                                            <option value="radiology">Radiology</option>
+                                            <option value="anesthesiology">Anesthesiology</option>
+                                        </select>
+                                        <div class="error-message" id="specializationError"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Summary -->
+                            <div class="form-section">
+                                <h3 class="section-title">Professional Summary</h3>
+                                <div class="form-group">
+                                    <label for="summary">Professional Summary *</label>
+                                    <textarea id="summary" name="summary" rows="4" placeholder="Enter Professional Summary" required></textarea>
+                                    <div class="error-message" id="summaryError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Licenses & Registrations -->
+                            <div class="form-section">
+                                <h3 class="section-title">Licenses & Registrations</h3>
+                                <div class="form-group">
+                                    <label for="licenses">Licenses/Registrations *</label>
+                                    <textarea id="licenses" name="licenses" rows="3" placeholder="Enter License/Registration Details (Medical Council Number, NPI/GMC/SLMC, License Status/Expiry)" required></textarea>
+                                    <div class="error-message" id="licensesError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Clinical Focus & Skills -->
+                            <div class="form-section">
+                                <h3 class="section-title">Clinical Focus & Skills</h3>
+                                <div class="form-group">
+                                    <label for="clinicalFocus">Clinical Focus / Skills *</label>
+                                    <textarea id="clinicalFocus" name="clinicalFocus" rows="3" placeholder="Enter Clinical Focus & Skills (Procedures Performed, Conditions Treated, Age Groups)" required></textarea>
+                                    <div class="error-message" id="clinicalFocusError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Hospital/Clinic Affiliations -->
+                            <div class="form-section">
+                                <h3 class="section-title">Hospital/Clinic Affiliations</h3>
+                                <div class="form-group">
+                                    <label for="affiliations">Hospital/Clinic Affiliations *</label>
+                                    <textarea id="affiliations" name="affiliations" rows="3" placeholder="Enter Hospital/Clinic Affiliations (Current Workplaces, Departments, Privileges)" required></textarea>
+                                    <div class="error-message" id="affiliationsError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Languages -->
+                            <div class="form-section">
+                                <h3 class="section-title">Languages</h3>
+                                <div class="form-group">
+                                    <label for="languages">Languages *</label>
+                                    <input type="text" id="languages" name="languages" placeholder="Enter Languages (Patient-facing languages and proficiency)" required>
+                                    <div class="error-message" id="languagesError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Contact & Availability -->
+                            <div class="form-section">
+                                <h3 class="section-title">Contact & Availability</h3>
+                                <div class="form-group">
+                                    <label for="contact">Contact & Availability *</label>
+                                    <textarea id="contact" name="contact" rows="3" placeholder="Enter Contact Details and Availability (Clinic Hours, Locations, Telemedicine Availability)" required></textarea>
+                                    <div class="error-message" id="contactError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Ratings Snapshot -->
+                            <div class="form-section">
+                                <h3 class="section-title">Ratings Snapshot</h3>
+                                <div class="form-group">
+                                    <label for="ratings">Ratings Snapshot</label>
+                                    <input type="text" id="ratings" name="ratings" placeholder="Average Stars, Number of Reviews (from Feedbacks table)" readonly>
+                                    <small class="form-help">This field will be automatically populated from patient feedbacks</small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Profile Image Upload -->
+                    <div class="profile-image-section">
+                        <div class="image-upload-container">
+                            <div class="image-preview" id="imagePreview">
+                                <div class="placeholder-image">
+                                    <i class="fas fa-user-md"></i>
+                                    <p>Upload Doctor's Photo</p>
+                                </div>
+                                <img id="previewImg" style="display: none;" alt="Doctor Profile Preview">
+                            </div>
+                            
+                            <div class="upload-controls">
+                                <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="handleImageUpload(event)">
+                                <label for="profileImage" class="upload-btn">
+                                    <i class="fas fa-upload"></i>
+                                    Upload Image
+                                </label>
+                                <button type="button" class="remove-btn" id="removeImageBtn" onclick="removeImage()" style="display: none;">
+                                    <i class="fas fa-trash"></i>
+                                    Remove
+                                </button>
+                            </div>
+                            
+                            <div class="image-info">
+                                <p>Supported formats: JPG, PNG, GIF</p>
+                                <p>Max size: 5MB</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="doctor-profile-script.js"></script>
+</body>
+</html>

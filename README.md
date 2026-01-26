@@ -1,4 +1,13 @@
-# EC Healthcare Portal - Complete CRUD Application
+# EC Healthcare Portal 
+<img width="1867" height="1008" alt="image" src="https://github.com/user-attachments/assets/d0f21099-4bba-4d68-81bf-458e0e88b36d" />
+<img width="1850" height="910" alt="image" src="https://github.com/user-attachments/assets/070b8284-db12-4484-b890-2652af833f1e" />
+<img width="1855" height="912" alt="image" src="https://github.com/user-attachments/assets/0738f690-d742-452e-896a-a3baa097bf92" />
+<img width="1865" height="909" alt="image" src="https://github.com/user-attachments/assets/94677382-25d3-43ed-bdd7-d5711df53ce8" />
+<img width="1871" height="909" alt="image" src="https://github.com/user-attachments/assets/0f496f93-a1fb-4c85-a7f7-565c5238eb01" />
+
+
+
+
 
 A comprehensive healthcare management portal with dashboard, user management, doctor profiles, medical reports, and patient feedbacks. Built with Node.js, Express, MongoDB, and modern frontend technologies.
 

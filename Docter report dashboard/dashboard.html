@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EC Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <img src="assects/logo.jpeg" alt="EC Healthcare">
+            </div>
+            <span>EC Healthcare</span>
+        </div>
+        <div class="nav">
+            <button class="nav-btn active" onclick="location.href='dashboard.html'">Dashboard</button>
+            <button class="nav-btn" onclick="location.href='users.html'">User feedbacks</button>
+            <button class="nav-btn" onclick="location.href='reports.html'">Doctor reports</button>
+        </div>
+        <button class="user-menu" onclick="logout()">👤</button>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <a href="dashboard.html" class="sidebar-item active">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="users.html" class="sidebar-item">
+                <span>👥</span> Users
+            </a>
+            <a href="feedbacks.html" class="sidebar-item">
+                <span>💬</span> Feedbacks
+            </a>
+            <a href="reports.html" class="sidebar-item">
+                <span>📄</span> Reports
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="toolbar">
+                <input type="text" class="search-box" placeholder="🔍 Search">
+                <button class="filter-btn">🔽 Filter by</button>
+                <button class="filter-btn">☰ Sort of</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <img src="assects/user icon.png" alt="Users">
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-users">0</h3>
+                        <p>Total Users</p>
+                        <small style="color: #95a5a6;">All registered users</small>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <img src="assects/deocter icon.png" alt="Doctors">
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-doctors">0</h3>
+                        <p>Doctors</p>
+                        <small style="color: #95a5a6;">Medical professionals</small>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pink">
+                        <img src="assects/images.jpeg" alt="Reports">
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-reports">0</h3>
+                        <p>Reports</p>
+                        <small style="color: #95a5a6;">Medical reports</small>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <img src="assects/feedbak icon.avif" alt="Feedbacks">
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-feedbacks">0</h3>
+                        <p>Feedbacks</p>
+                        <small style="color: #95a5a6;">Patient feedbacks</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Type Breakdown</h3>
+                        <span>⋮</span>
+                    </div>
+                    <canvas id="user-chart" width="400" height="300"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Reports Last 30 Days</h3>
+                        <span>⋮</span>
+                    </div>
+                    <canvas id="reports-chart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

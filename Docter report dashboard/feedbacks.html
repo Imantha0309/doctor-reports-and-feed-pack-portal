@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedbacks - EC Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon"><img src="assects/logo.jpeg" alt="EC Healthcare"></div>
+            <span>EC Healthcare</span>
+        </div>
+        <div class="nav">
+            <button class="nav-btn" onclick="location.href='dashboard.html'">Dashboard</button>
+            <button class="nav-btn active" onclick="location.href='feedbacks.html'">User feedbacks</button>
+            <button class="nav-btn" onclick="location.href='reports.html'">Doctor reports</button>
+        </div>
+        <button class="user-menu" onclick="logout()">👤</button>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <a href="dashboard.html" class="sidebar-item"><span>📊</span> Dashboard</a>
+            <a href="users.html" class="sidebar-item"><span>👥</span> Users</a>
+            <a href="feedbacks.html" class="sidebar-item active"><span>💬</span> Feedbacks</a>
+            <a href="reports.html" class="sidebar-item"><span>📄</span> Reports</a>
+        </div>
+
+        <div class="main-content">
+            <h2 style="margin-bottom: 1.5rem;">Patient Feedbacks</h2>
+
+            <div class="toolbar">
+                <input type="text" id="search-input" class="search-box" placeholder="🔍 Search feedbacks">
+                <select id="status-filter" class="filter-select">
+                    <option value="">All Statuses</option>
+                    <option value="new">New</option>
+                    <option value="reviewed">Reviewed</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+                <select id="sort-select" class="filter-select">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                    <option value="rating_high">Rating high-low</option>
+                    <option value="rating_low">Rating low-high</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Subject</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbacks-table">
+                        <tr><td colspan="6" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Feedback Details</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-save" onclick="saveStatus()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        const PAGE_SIZE = 10;
+        let allFeedbacks = [], filtered = [], currentPage = 1, editingId = null;
+
+        async function loadFeedbacks() {
+            try {
+                const response = await fetch('php/api.php?action=feedbacks');
+                const result = await response.json();
+                if (result.success) {
+                    allFeedbacks = result.data;
+                    applyFilters();
+                }
+            } catch (e) {
+                console.error('Error loading feedbacks:', e);
+            }
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const status = document.getElementById('status-filter').value;
+            const sort   = document.getElementById('sort-select').value;
+
+            filtered = allFeedbacks.filter(f => {
+                const matchSearch = !search ||
+                    (f.user_name || '').toLowerCase().includes(search) ||
+                    (f.subject || '').toLowerCase().includes(search);
+                const matchStatus = !status || f.status === status;
+                return matchSearch && matchStatus;
+            });
+
+            filtered.sort((a, b) => {
+                if (sort === 'oldest')      return new Date(a.created_at) - new Date(b.created_at);
+                if (sort === 'rating_high') return (b.rating || 0) - (a.rating || 0);
+                if (sort === 'rating_low')  return (a.rating || 0) - (b.rating || 0);
+                return new Date(b.created_at) - new Date(a.created_at);
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('feedbacks-table');
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const page  = filtered.slice(start, start + PAGE_SIZE);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;">No feedbacks found</td></tr>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = page.map(f => `
+                <tr onclick="openModal(${f.id})">
+                    <td>#${f.id}</td>
+                    <td>${f.user_name || 'Anonymous'}</td>
+                    <td>${f.subject || 'N/A'}</td>
+                    <td>${'⭐'.repeat(f.rating || 0)}</td>
+                    <td><span class="badge ${f.status}">${f.status}</span></td>
+                    <td>${new Date(f.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+
+            renderPagination(filtered.length);
+        }
+
+        function renderPagination(total) {
+            const totalPages = Math.ceil(total / PAGE_SIZE);
+            const el = document.getElementById('pagination');
+            if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+            let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ Prev</button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+                    html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                } else if (Math.abs(i - currentPage) === 2) {
+                    html += `<span class="page-info">…</span>`;
+                }
+            }
+            html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next ›</button>`;
+            html += `<span class="page-info">${total} total</span>`;
+            el.innerHTML = html;
+        }
+
+        function goPage(p) {
+            const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            renderTable();
+        }
+
+        function openModal(id) {
+            const f = allFeedbacks.find(x => x.id === id);
+            if (!f) return;
+            editingId = id;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="detail-row">
+                    <div class="detail-field"><label>User</label><p>${f.user_name || 'Anonymous'}</p></div>
+                    <div class="detail-field"><label>Rating</label><p>${'⭐'.repeat(f.rating || 0)} (${f.rating || 0}/5)</p></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-field"><label>Subject</label><p>${f.subject || 'N/A'}</p></div>
+                    <div class="detail-field"><label>Date</label><p>${new Date(f.created_at).toLocaleString()}</p></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-field"><label>Message</label><p style="white-space:pre-wrap;">${f.message}</p></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-field">
+                        <label>Status</label>
+                        <select id="status-select">
+                            <option value="new"      ${f.status==='new'?'selected':''}>New</option>
+                            <option value="reviewed" ${f.status==='reviewed'?'selected':''}>Reviewed</option>
+                            <option value="resolved" ${f.status==='resolved'?'selected':''}>Resolved</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-overlay').classList.add('open');
+        }
+
+        async function saveStatus() {
+            const status = document.getElementById('status-select').value;
+            try {
+                const fd = new FormData();
+                fd.append('id', editingId);
+                fd.append('status', status);
+                const res = await fetch('php/api.php?action=update_feedback', { method: 'POST', body: fd });
+                const result = await res.json();
+                if (result.success) {
+                    const fb = allFeedbacks.find(x => x.id === editingId);
+                    if (fb) fb.status = status;
+                    applyFilters();
+                    closeModal();
+                    showToast('Status updated', 'success');
+                } else {
+                    showToast(result.message || 'Update failed', 'error');
+                }
+            } catch (e) {
+                showToast('Error saving changes', 'error');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('open');
+            editingId = null;
+        }
+
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + type;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        document.getElementById('search-input').addEventListener('input', applyFilters);
+        document.getElementById('status-filter').addEventListener('change', applyFilters);
+        document.getElementById('sort-select').addEventListener('change', applyFilters);
+        document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+        loadFeedbacks();
+    </script>
+</body>
+</html>

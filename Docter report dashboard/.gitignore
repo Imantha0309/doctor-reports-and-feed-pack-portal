@@ -1,0 +1,10 @@
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sensitive config - copy php/config.example.php to php/config.php
+php/config.php

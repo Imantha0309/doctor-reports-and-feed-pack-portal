@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen" class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo"><img src="assets/logo.jpeg" alt="EC Healthcare"> EC Healthcare</div>
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login',this)">Login</button>
+            <button class="auth-tab" onclick="switchAuthTab('register',this)">Register</button>
+            <button class="auth-tab" onclick="switchAuthTab('doctor',this)">Doctor Sign Up</button>
+        </div>
+        <div id="login-form" class="auth-form active">
+            <div class="error-msg" id="login-error"></div>
+            <div class="form-group"><label>Username or Email</label><input type="text" id="login-username" placeholder="Enter username or email"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Enter password"></div>
+            <button class="btn-primary" onclick="doLogin()">Login</button>
+        </div>
+        <div id="register-form" class="auth-form">
+            <div class="error-msg" id="register-error"></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="reg-fullname" placeholder="Your full name"></div>
+            <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Choose a username"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="At least 6 characters"></div>
+            <button class="btn-primary" onclick="doRegister()">Create Account</button>
+        </div>
+        <div id="doctor-form" class="auth-form">
+            <div class="error-msg" id="doctor-error"></div>
+            <div class="form-group"><label>Full Name *</label><input type="text" id="doc-fullname" placeholder="Dr. Your Name"></div>
+            <div class="form-group"><label>Username *</label><input type="text" id="doc-username" placeholder="Choose a username"></div>
+            <div class="form-group"><label>Email *</label><input type="email" id="doc-email" placeholder="doctor@hospital.com"></div>
+            <div class="form-group"><label>Password *</label><input type="password" id="doc-password" placeholder="At least 6 characters"></div>
+            <div class="form-group"><label>Specialization *</label><input type="text" id="doc-specialization" placeholder="e.g. Cardiology, Pediatrics"></div>
+            <div class="form-group"><label>License Number</label><input type="text" id="doc-license" placeholder="Medical license number"></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="doc-phone" placeholder="Contact number"></div>
+            <button class="btn-primary" onclick="doRegisterDoctor()">Register as Doctor</button>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN / DOCTOR -->
+<div id="admin-screen" style="display:none;">
+    <header class="app-header">
+        <div class="header-logo"><img src="assets/logo.jpeg" alt=""> EC Healthcare</div>
+        <div class="header-right">
+            <span>&#128100; <strong id="admin-name"></strong></span>
+            <button class="btn-logout" onclick="doLogout()">Logout</button>
+        </div>
+    </header>
+    <div class="admin-shell">
+        <nav class="sidebar">
+            <a class="sidebar-item active" onclick="adminPage('dashboard',this)"><span>&#128202;</span> Dashboard</a>
+            <a class="sidebar-item" onclick="adminPage('reports',this)"><span>&#128196;</span> Reports</a>
+            <a class="sidebar-item" onclick="adminPage('feedbacks',this)"><span>&#128172;</span> Feedbacks</a>
+            <a class="sidebar-item" id="users-nav-item" onclick="adminPage('users',this)"><span>&#128101;</span> Users</a>
+        </nav>
+        <div class="admin-content">
+
+            <!-- Dashboard -->
+            <div id="admin-dashboard" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon purple"><img src="assets/user icon.png" alt=""></div><div class="stat-info"><h3 id="s-users">0</h3><p>Total Users</p></div></div>
+                    <div class="stat-card"><div class="stat-icon blue"><img src="assets/deocter icon.png" alt=""></div><div class="stat-info"><h3 id="s-doctors">0</h3><p>Doctors</p></div></div>
+                    <div class="stat-card"><div class="stat-icon pink"><img src="assets/images.jpeg" alt=""></div><div class="stat-info"><h3 id="s-reports">0</h3><p>Reports</p></div></div>
+                    <div class="stat-card"><div class="stat-icon orange"><img src="assets/feedbak icon.avif" alt=""></div><div class="stat-info"><h3 id="s-feedbacks">0</h3><p>Feedbacks</p></div></div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card"><div class="chart-header"><h3>User Type Breakdown</h3></div><canvas id="chart-users" width="400" height="280"></canvas></div>
+                    <div class="chart-card"><div class="chart-header"><h3>Reports Last 30 Days</h3></div><canvas id="chart-reports" width="400" height="280"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Reports -->
+            <div id="admin-reports" class="page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+                    <h2>Medical Reports</h2>
+                    <button class="btn-save" id="new-report-btn" style="display:none;" onclick="openCreateReport()">+ New Report</button>
+                </div>
+                <div class="toolbar">
+                    <input type="text" id="rpt-search" class="search-box" placeholder="&#128269; Search" oninput="filterReports()">
+                    <select id="rpt-status" class="filter-select" onchange="filterReports()">
+                        <option value="">All Statuses</option><option value="pending">Pending</option>
+                        <option value="reviewed">Reviewed</option><option value="completed">Completed</option>
+                    </select>
+                    <select id="rpt-sort" class="filter-select" onchange="filterReports()">
+                        <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="title">Title A-Z</option>
+                    </select>
+                </div>
+                <div class="table-wrap">
+                    <table><thead><tr><th>ID</th><th>Patient</th><th>Title</th><th>Doctor</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="rpt-tbody"></tbody></table>
+                    <div class="pagination" id="rpt-pages"></div>
+                </div>
+            </div>
+
+            <!-- Feedbacks -->
+            <div id="admin-feedbacks" class="page">
+                <h2 style="margin-bottom:1.25rem;">Patient Feedbacks</h2>
+                <div class="toolbar">
+                    <input type="text" id="fb-search" class="search-box" placeholder="&#128269; Search" oninput="filterFeedbacks()">
+                    <select id="fb-status-filter" class="filter-select" onchange="filterFeedbacks()">
+                        <option value="">All Statuses</option><option value="new">New</option>
+                        <option value="reviewed">Reviewed</option><option value="resolved">Resolved</option>
+                    </select>
+                    <select id="fb-sort" class="filter-select" onchange="filterFeedbacks()">
+                        <option value="newest">Newest first</option><option value="oldest">Oldest first</option>
+                        <option value="rating_high">Rating high-low</option><option value="rating_low">Rating low-high</option>
+                    </select>
+                </div>
+                <div class="table-wrap">
+                    <table><thead><tr><th>ID</th><th>User</th><th>Doctor</th><th>Subject</th><th>Rating</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="fb-tbody"></tbody></table>
+                    <div class="pagination" id="fb-pages"></div>
+                </div>
+            </div>
+
+            <!-- Users -->
+            <div id="admin-users" class="page">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+                    <h2>User Management</h2>
+                    <button class="btn-save" onclick="openCreateUser()">+ New User</button>
+                </div>
+                <div class="toolbar">
+                    <input type="text" id="usr-search" class="search-box" placeholder="&#128269; Search" oninput="filterUsers()">
+                    <select id="usr-role" class="filter-select" onchange="filterUsers()">
+                        <option value="">All Roles</option><option value="admin">Admin</option>
+                        <option value="doctor">Doctor</option><option value="user">User</option>
+                    </select>
+                    <select id="usr-sort" class="filter-select" onchange="filterUsers()">
+                        <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Name A-Z</option>
+                    </select>
+                </div>
+                <div class="table-wrap">
+                    <table><thead><tr><th>ID</th><th>Username</th><th>Full Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+                    <tbody id="usr-tbody"></tbody></table>
+                    <div class="pagination" id="usr-pages"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PATIENT -->
+<div id="patient-screen" style="display:none;">
+    <header class="app-header">
+        <div class="header-logo"><img src="assets/logo.jpeg" alt=""> EC Healthcare</div>
+        <div class="header-right">
+            <span>Hello, <strong id="patient-name"></strong></span>
+            <button class="btn-logout" onclick="doLogout()">Logout</button>
+        </div>
+    </header>
+    <nav class="patient-nav">
+        <button class="nav-tab active" onclick="patientPage('my-reports',this)">&#128196; My Reports</button>
+        <button class="nav-tab" onclick="patientPage('submit-feedback',this)">&#128172; Submit Feedback</button>
+        <button class="nav-tab" onclick="patientPage('my-feedbacks',this);loadMyFeedbacks()">&#128203; My Feedbacks</button>
+    </nav>
+    <div class="patient-content">
+        <div id="my-reports" class="page active">
+            <div class="card"><div class="card-title">&#128196; My Medical Reports</div>
+            <div id="my-reports-list"><div class="empty-state"><div class="icon">&#8987;</div><p>Loading...</p></div></div></div>
+        </div>
+        <div id="submit-feedback" class="page">
+            <div class="card"><div class="card-title">&#128172; Submit Feedback</div>
+            <div class="error-msg" id="sfb-error"></div>
+            <div class="form-group"><label>Doctor <span style="color:#95a5a6;font-weight:400;">(optional)</span></label>
+                <select id="sfb-doctor"><option value="">-- No specific doctor --</option></select></div>
+            <div class="form-group"><label>Subject</label><input type="text" id="sfb-subject" placeholder="e.g. Appointment experience"></div>
+            <div class="form-group"><label>Your Rating *</label>
+                <div class="star-rating">
+                    <input type="radio" id="s5" name="rating" value="5"><label for="s5">&#9733;</label>
+                    <input type="radio" id="s4" name="rating" value="4"><label for="s4">&#9733;</label>
+                    <input type="radio" id="s3" name="rating" value="3"><label for="s3">&#9733;</label>
+                    <input type="radio" id="s2" name="rating" value="2"><label for="s2">&#9733;</label>
+                    <input type="radio" id="s1" name="rating" value="1"><label for="s1">&#9733;</label>
+                </div>
+            </div>
+            <div class="form-group"><label>Message *</label><textarea id="sfb-message" placeholder="Share your experience..."></textarea></div>
+            <button class="btn-primary" onclick="doSubmitFeedback()">Submit Feedback</button></div>
+        </div>
+        <div id="my-feedbacks" class="page">
+            <div class="card"><div class="card-title">&#128203; My Submitted Feedbacks</div>
+            <div id="my-feedbacks-list"><div class="empty-state"><div class="icon">&#128172;</div><p>Loading...</p></div></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MODALS ══════════════════════════════════════════════════════════════════ -->
+
+<!-- Create / Edit Report -->
+<div class="modal-overlay" id="modal-create-report">
+    <div class="modal">
+        <div class="modal-header"><h3 id="rpt-modal-title">New Medical Report</h3><button class="modal-close" onclick="closeModal('modal-create-report')">&#215;</button></div>
+        <div class="modal-body">
+            <div class="detail-row"><div class="detail-field"><label>Patient</label><select id="cr-patient"><option value="">-- Select patient --</option></select></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Title *</label><input type="text" id="cr-title" placeholder="Report title"></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Description</label><textarea id="cr-description" placeholder="Symptoms, observations..."></textarea></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Diagnosis</label><textarea id="cr-diagnosis" placeholder="Diagnosis and treatment plan..."></textarea></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Status</label>
+                <select id="cr-status">
+                    <option value="pending">Pending</option><option value="reviewed">Reviewed</option><option value="completed">Completed</option>
+                </select>
+            </div></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-create-report')">Cancel</button>
+            <button class="btn-save" id="rpt-save-btn" onclick="saveReport()">Create Report</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Feedback (admin) -->
+<div class="modal-overlay" id="modal-feedback">
+    <div class="modal">
+        <div class="modal-header"><h3>Feedback Details</h3><button class="modal-close" onclick="closeModal('modal-feedback')">&#215;</button></div>
+        <div class="modal-body" id="modal-feedback-body"></div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-feedback')">Cancel</button>
+            <button class="btn-save" onclick="saveFeedbackStatus()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create / Edit User -->
+<div class="modal-overlay" id="modal-user-form">
+    <div class="modal">
+        <div class="modal-header"><h3 id="usr-modal-title">New User</h3><button class="modal-close" onclick="closeModal('modal-user-form')">&#215;</button></div>
+        <div class="modal-body">
+            <div class="detail-row"><div class="detail-field"><label>Full Name *</label><input type="text" id="usr-fullname" placeholder="Full name"></div></div>
+            <div class="detail-row" id="usr-username-row"><div class="detail-field"><label>Username *</label><input type="text" id="usr-username" placeholder="Username"></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Email *</label><input type="text" id="usr-email" placeholder="Email address"></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Password <span id="pw-hint" style="color:#95a5a6;font-weight:400;">(leave blank to keep)</span></label><input type="password" id="usr-password" placeholder="Password"></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Role *</label>
+                <select id="usr-role-sel" onchange="toggleDoctorFields(this.value)">
+                    <option value="user">Patient</option><option value="doctor">Doctor</option><option value="admin">Admin</option>
+                </select>
+            </div></div>
+            <div id="doctor-extra-fields" style="display:none;">
+                <div class="detail-row"><div class="detail-field"><label>Specialization</label><input type="text" id="usr-spec" placeholder="e.g. Cardiology"></div></div>
+                <div class="detail-row"><div class="detail-field"><label>License Number</label><input type="text" id="usr-license" placeholder="License number"></div></div>
+                <div class="detail-row"><div class="detail-field"><label>Phone</label><input type="text" id="usr-phone" placeholder="Phone number"></div></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-user-form')">Cancel</button>
+            <button class="btn-save" id="usr-save-btn" onclick="saveUser()">Create User</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation -->
+<div class="modal-overlay" id="modal-confirm">
+    <div class="modal" style="max-width:420px;">
+        <div class="modal-header"><h3>Confirm Delete</h3><button class="modal-close" onclick="closeModal('modal-confirm')">&#215;</button></div>
+        <div class="modal-body"><p id="confirm-msg" style="color:#2c3e50;line-height:1.6;"></p></div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-confirm')">Cancel</button>
+            <button class="btn-save" style="background:#e74c3c;" onclick="doDelete()">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Patient: view report -->
+<div class="modal-overlay" id="modal-my-report">
+    <div class="modal">
+        <div class="modal-header"><h3>Report Details</h3><button class="modal-close" onclick="closeModal('modal-my-report')">&#215;</button></div>
+        <div class="modal-body" id="modal-my-report-body"></div>
+        <div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-my-report')">Close</button></div>
+    </div>
+</div>
+
+<!-- Patient: edit feedback -->
+<div class="modal-overlay" id="modal-edit-feedback">
+    <div class="modal">
+        <div class="modal-header"><h3>Edit Feedback</h3><button class="modal-close" onclick="closeModal('modal-edit-feedback')">&#215;</button></div>
+        <div class="modal-body">
+            <div class="detail-row"><div class="detail-field"><label>Doctor <span style="color:#95a5a6;font-weight:400;">(optional)</span></label>
+                <select id="edit-fb-doctor"><option value="">-- No specific doctor --</option></select></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Subject</label><input type="text" id="edit-fb-subject" placeholder="Subject"></div></div>
+            <div class="detail-row"><div class="detail-field"><label>Rating *</label>
+                <div class="star-rating">
+                    <input type="radio" id="e5" name="edit-rating" value="5"><label for="e5">&#9733;</label>
+                    <input type="radio" id="e4" name="edit-rating" value="4"><label for="e4">&#9733;</label>
+                    <input type="radio" id="e3" name="edit-rating" value="3"><label for="e3">&#9733;</label>
+                    <input type="radio" id="e2" name="edit-rating" value="2"><label for="e2">&#9733;</label>
+                    <input type="radio" id="e1" name="edit-rating" value="1"><label for="e1">&#9733;</label>
+                </div>
+            </div></div>
+            <div class="detail-row"><div class="detail-field"><label>Message *</label><textarea id="edit-fb-message" placeholder="Your message..."></textarea></div></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-edit-feedback')">Cancel</button>
+            <button class="btn-save" onclick="saveMyFeedback()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/patient.js"></script>
+</body>
+</html>
